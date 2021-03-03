@@ -9,10 +9,14 @@ import (
 	"path/filepath"
 )
 
+// loading configuration files from folder
 func LoadConfigurations() {
 	var files []string
 
+	// config root
 	root := "./config/http/"
+
+	// get all config files
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		files = append(files, path)
 		return nil
@@ -21,6 +25,8 @@ func LoadConfigurations() {
 		panic(err)
 	}
 	first := false
+
+	// check syntax and enable configs
 	for _, file := range files {
 		if first {
 			status, config := checkSyntax(file)
@@ -35,6 +41,7 @@ func LoadConfigurations() {
 	}
 }
 
+// checks the configuration syntax
 func checkSyntax(filename string) (b bool, c *models.HttpConfig) {
 	f, err := os.Open(filename)
 	if err != nil {

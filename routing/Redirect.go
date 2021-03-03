@@ -10,21 +10,36 @@ import (
 	"strings"
 )
 
+// redirect controller
 func Redirect(c *fiber.Ctx) error {
+
 	url := c.BaseURL()
+
 	split := strings.Split(url, "://")
+
+	// get config by domainname
 	cfg := Var.GetConfig(split[1])
+
 	if cfg == nil {
 		return c.SendString("Server is not configured correctly")
 	}
+
 	href := c.OriginalURL()
+	// autocompletes the url if needed
 	root := autocomplete(href, cfg)
+
 	return c.SendFile(root)
 }
 
+// autocompletes url
 func autocomplete(url string, cfg *models.HttpConfig) string {
+
 	requested := cfg.Server.DocumentRoot + url
+
+	// checks if url is directory
 	isDir, err := utils.IsDirectory(requested)
+
+	// try index file
 	if err != nil {
 		return cfg.Server.DocumentRoot + "/" + cfg.Server.EntryPoint
 	}
@@ -35,6 +50,7 @@ func autocomplete(url string, cfg *models.HttpConfig) string {
 	}
 }
 
+// scans for index files
 func scanDirForIndexFiles(root string, url string) string {
 	var files []string
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
