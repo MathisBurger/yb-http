@@ -2,7 +2,8 @@
 
 yb-http is a lightweight and easy use webserver. It is very fast, 
 because it is based on fiber. 
-In future releases, I will add a webinterface. Trough it you can manage your Webserver very quick.
+It is not made for everyone. It needs an index.html file in every file to run without errors.
+It is more like a fun project than a real webserver for production use.
 
 
 ## Usage
